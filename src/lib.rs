@@ -1,5 +1,9 @@
 #![no_std]
 
+
+#[doc(hidden)]
+pub use core::mem::transmute;
+
 /**
  * Slices (via the Index trait & operation) into fixed size arrays
  *
@@ -36,7 +40,7 @@ macro_rules! index_fixed {
     };
     (&mut $s:expr ; $b:expr , .. $e:expr) => { {
         unsafe fn conv<T>(a: &mut[T]) -> &mut[T;$e - $b] {
-            ::core::mem::transmute::<*mut T, &mut[T;$e - $b]>(a.as_mut_ptr())
+            $crate::transmute::<*mut T, &mut[T;$e - $b]>(a.as_mut_ptr())
         }
         unsafe { conv(&mut $s[$b..$e]) }
     } };
@@ -48,7 +52,7 @@ macro_rules! index_fixed {
     };
     (& $s:expr ; $b:expr , .. $e:expr) => { {
         unsafe fn conv<T>(a: &[T]) -> &[T;$e - $b] {
-            ::core::mem::transmute::<*const T, &[T;$e - $b]>(a.as_ptr())
+            $crate::transmute::<*const T, &[T;$e - $b]>(a.as_ptr())
         }
         unsafe { conv(& $s[$b..$e]) }
     } };
