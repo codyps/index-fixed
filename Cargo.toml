@@ -1,11 +1,12 @@
 [package]
 name = "index-fixed"
-version = "0.0.0"
+version = "0.0.2"
 authors = ["Cody P Schafer <dev@codyps.com>"]
 license = "Apache-2.0 OR MIT"
 keywords = ["slice", "array", "const", "fixed", "index"]
 repository = "https://github.com/jmesmon/index-fixed"
 documentation = "http://codyps.com/docs/index-fixed/x86_64-unknown-linux-gnu/stable/index_fixed/index.html"
 description = "slice index-ables into fixed-length slices (arrays, [T;N])"
+include = [ "Cargo.toml", "src/*.rs" ]
 
 [dependencies]
