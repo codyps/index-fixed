@@ -44,10 +44,11 @@ macro_rules! index_fixed {
         index_fixed!(&mut $s; $b , .. ($e + 1))
     };
     (&mut $s:expr ; $b:expr , .. $e:expr) => { {
-        unsafe fn conv<T>(a: &mut[T]) -> &mut[T;$e - $b] {
-            $crate::transmute::<*mut T, &mut[T;$e - $b]>(a.as_mut_ptr())
+        fn conv<T>(a: &mut[T]) -> &mut[T;$e - $b] {
+            let b = &mut a[$b..$e];
+            unsafe { $crate::transmute::<*mut T, &mut[T;$e - $b]>(b.as_mut_ptr()) }
         }
-        unsafe { conv(&mut $s[$b..$e]) }
+        conv(&mut $s)
     } };
     (& $s:expr ; .. $e:expr) => {
         index_fixed!(& $s ; 0 , .. $e)
@@ -56,9 +57,10 @@ macro_rules! index_fixed {
         index_fixed!(& $s ; $b , .. ($e + 1))
     };
     (& $s:expr ; $b:expr , .. $e:expr) => { {
-        unsafe fn conv<T>(a: &[T]) -> &[T;$e - $b] {
-            $crate::transmute::<*const T, &[T;$e - $b]>(a.as_ptr())
+        fn conv<T>(a: &[T]) -> &[T;$e - $b] {
+            let b = &a[$b..$e];
+            unsafe { $crate::transmute::<*const T, &[T;$e - $b]>(b.as_ptr()) }
         }
-        unsafe { conv(& $s[$b..$e]) }
+        conv(& $s)
     } };
 }
