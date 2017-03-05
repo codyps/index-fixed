@@ -23,10 +23,15 @@ pub use core::mem::transmute;
  *
  * # Examples
  *
- * ```notest
- * let my_slice = [1, 2, 3, 4];
- * let slice_of_2 = index_fixed!(&my_slice ; .. 2);
- * assert_eq!(slice_of_2, &[1..2]);
+ * ```
+ * #[macro_use]
+ * extern crate index_fixed;
+ *
+ * fn main() {
+ *   let my_slice = [1, 2, 3, 4];
+ *   let slice_of_2 = index_fixed!(&my_slice ; .. 2);
+ *   assert_eq!(slice_of_2, &my_slice[..2]);
+ * }
  * ```
  */
 // FIXME example test disabled because index_fixed!() is not defined
