@@ -75,3 +75,10 @@ fn out_of_range() {
     let a = [1u8, 5];
     let _ = index_fixed!(&a; ..3);
 }
+
+#[test]
+fn const_usage() {
+    const X: usize = 2;
+    let a = [1u8, 2, 4, 5];
+    let _ = index_fixed!(&a; X, .. X * 2);
+}
