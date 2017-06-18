@@ -6,7 +6,7 @@ license = "Apache-2.0 OR MIT"
 keywords = ["slice", "array", "const", "fixed", "index"]
 repository = "https://github.com/jmesmon/index-fixed"
 documentation = "https://docs.rs/index-fixed"
-description = "slice index-ables into arrays ([T] -> [T;N])"
-include = [ "Cargo.toml", "src/*.rs", "tests/*.rs" ]
+description = "convert slices into arrays using indexes ([T] -> [T;N])"
+include = [ "Cargo.toml", "**/*.rs" ]
 
 [dependencies]
