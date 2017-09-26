@@ -9,4 +9,7 @@ documentation = "https://docs.rs/index-fixed"
 description = "convert slices into arrays using indexes ([T] -> [T;N])"
 include = [ "Cargo.toml", "**/*.rs" ]
 
+[badges]
+travis-ci = { repository = "jmesmon/index-fixed" }
+
 [dependencies]
