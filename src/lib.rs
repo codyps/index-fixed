@@ -100,12 +100,12 @@ macro_rules! index_fixed_get {
         index_fixed_get!(&mut $s; $b , .. ($e + 1))
     };
     (&mut $s:expr ; $b:expr , .. $e:expr) => { {
-        fn conv<T>(a: &mut[T]) -> Option<&mut[T;$e - $b]> {
-            a.get_mut($b..$e).map(|b|
+        fn conv<T>(a: Option<&mut[T]>) -> Option<&mut[T;$e - $b]> {
+            a.map(|b|
                 unsafe { $crate::transmute::<*mut T, &mut [T;$e - $b]>(b.as_mut_ptr()) }
             )
         }
-        conv(&mut $s)
+        conv($s.get_mut($b..$e))
     } };
     (& $s:expr ; .. $e:expr) => {
         index_fixed_get!(& $s ; 0 , .. $e)
@@ -114,11 +114,11 @@ macro_rules! index_fixed_get {
         index_fixed_get!(& $s ; $b , .. ($e + 1))
     };
     (& $s:expr ; $b:expr , .. $e:expr) => { {
-        fn conv<T>(a: &[T]) -> Option<&[T;$e - $b]> {
-            a.get($b..$e).map(|b|
+        fn conv<T>(a: Option<&[T]>) -> Option<&[T;$e - $b]> {
+            a.map(|b|
                 unsafe { $crate::transmute::<*const T, &[T;$e - $b]>(b.as_ptr()) }
             )
         }
-        conv(& $s)
+        conv($s.get($b..$e))
     } };
 }
