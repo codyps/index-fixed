@@ -1,4 +1,8 @@
 #![no_std]
+#![forbid(unsafe_code)]
+
+#[doc(hidden)]
+pub use core::convert::TryInto;
 
 /**
  * Slices (via the Index trait & operation) into fixed size arrays
@@ -41,7 +45,8 @@ macro_rules! index_fixed {
     };
     (&mut $s:expr ; $b:expr , .. $e:expr) => { {
         fn conv<T>(b: &mut[T]) -> &mut[T;$e - $b] {
-            unsafe { &mut *(b.as_mut_ptr() as *mut [T; $e - $b]) }
+            use $crate::TryInto;
+            b.try_into().unwrap()
         }
         conv(&mut $s[$b..$e])
     } };
@@ -53,7 +58,8 @@ macro_rules! index_fixed {
     };
     (& $s:expr ; $b:expr , .. $e:expr) => { {
         fn conv<T>(b: &[T]) -> &[T;$e - $b] {
-            unsafe { &*(b.as_ptr() as *const [T; $e - $b]) }
+            use $crate::TryInto;
+            b.try_into().unwrap()
         }
         conv(& $s[$b..$e])
     } };
@@ -97,9 +103,10 @@ macro_rules! index_fixed_get {
     };
     (&mut $s:expr ; $b:expr , .. $e:expr) => { {
         fn conv<T>(a: Option<&mut[T]>) -> Option<&mut[T;$e - $b]> {
-            a.map(|b|
-                unsafe { &mut *(b.as_mut_ptr() as *mut [T;$e - $b]) }
-            )
+            a.map(|b| {
+                  use $crate::TryInto;
+                  b.try_into().unwrap()
+            })
         }
         conv($s.get_mut($b..$e))
     } };
@@ -111,9 +118,10 @@ macro_rules! index_fixed_get {
     };
     (& $s:expr ; $b:expr , .. $e:expr) => { {
         fn conv<T>(a: Option<&[T]>) -> Option<&[T;$e - $b]> {
-            a.map(|b|
-                  unsafe { &*(b.as_ptr() as *const [T;$e - $b]) }
-            )
+            a.map(|b| {
+                  use $crate::TryInto;
+                  b.try_into().unwrap()
+            })
         }
         conv($s.get($b..$e))
     } };
