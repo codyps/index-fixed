@@ -10,3 +10,4 @@ Index to fixed-length arrays
 ### Alternates
 
  - [arrayref](https://crates.io/crates/arrayref)
+ - [std::convert::TryInfo](https://doc.rust-lang.org/std/primitive.array.html#impl-TryInto%3CU%3E)
