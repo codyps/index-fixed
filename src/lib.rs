@@ -1,9 +1,5 @@
 #![no_std]
 
-
-#[doc(hidden)]
-pub use core::mem::transmute;
-
 /**
  * Slices (via the Index trait & operation) into fixed size arrays
  *
@@ -45,7 +41,7 @@ macro_rules! index_fixed {
     };
     (&mut $s:expr ; $b:expr , .. $e:expr) => { {
         fn conv<T>(b: &mut[T]) -> &mut[T;$e - $b] {
-            unsafe { $crate::transmute::<*mut T, &mut[T;$e - $b]>(b.as_mut_ptr()) }
+            unsafe { &mut *(b.as_mut_ptr() as *mut [T; $e - $b]) }
         }
         conv(&mut $s[$b..$e])
     } };
@@ -57,7 +53,7 @@ macro_rules! index_fixed {
     };
     (& $s:expr ; $b:expr , .. $e:expr) => { {
         fn conv<T>(b: &[T]) -> &[T;$e - $b] {
-            unsafe { $crate::transmute::<*const T, &[T;$e - $b]>(b.as_ptr()) }
+            unsafe { &*(b.as_ptr() as *const [T; $e - $b]) }
         }
         conv(& $s[$b..$e])
     } };
@@ -102,7 +98,7 @@ macro_rules! index_fixed_get {
     (&mut $s:expr ; $b:expr , .. $e:expr) => { {
         fn conv<T>(a: Option<&mut[T]>) -> Option<&mut[T;$e - $b]> {
             a.map(|b|
-                unsafe { $crate::transmute::<*mut T, &mut [T;$e - $b]>(b.as_mut_ptr()) }
+                unsafe { &mut *(b.as_mut_ptr() as *mut [T;$e - $b]) }
             )
         }
         conv($s.get_mut($b..$e))
@@ -116,7 +112,7 @@ macro_rules! index_fixed_get {
     (& $s:expr ; $b:expr , .. $e:expr) => { {
         fn conv<T>(a: Option<&[T]>) -> Option<&[T;$e - $b]> {
             a.map(|b|
-                unsafe { $crate::transmute::<*const T, &[T;$e - $b]>(b.as_ptr()) }
+                  unsafe { &*(b.as_ptr() as *const [T;$e - $b]) }
             )
         }
         conv($s.get($b..$e))
